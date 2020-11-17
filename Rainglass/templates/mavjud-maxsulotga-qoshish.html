@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Eng yangi qo'shilgan{% endblock %}
+
+{% block header %}
+<style>
+    label {
+        padding-left: 2px;
+    }
+
+    .messages {
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .success {
+        background-color: #18b518;
+        color: #fff;
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .error {
+        background-color: red;
+        color: #fff;
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if request.user.is_staff %}
+<div class="dashboard-main-wrapper pt-5">
+    <div class="dashboard-wrapper">
+        <div class="dashboard-ecommerce">
+            <div class="container-fluid dashboard-content " style="width: 100%; ">
+                <h2 class="pageheader-title text-center mb-3 pb-5">Mavjud maxsulotga maxsulotga qo'shish</h2>
+                {% if messages %}
+                <div class="messages text-center">
+                    {% for message in messages %}
+                    <h3 {% if message.tags %} class="{{ message.tags }} p-4 text-center" {% endif %}>
+                        {% if message.tags == "success" %}
+                        <i class="fas fa-2x fa-check text-center"></i>
+                        {% else %}
+                        <i class="fas fa-2x fa-times"></i>
+                        {% endif %}
+                    </h3>
+                    <h3>{{ message }}</h3>
+                    {% if message.tags == "success" %}
+                    <meta http-equiv="refresh" content="2;url={% url 'rainglass:ombor-tarix' %}">
+                    {% else %}
+                    <meta http-equiv="refresh" content="2;url={% url 'rainglass:mavjud-maxsulotga-qoshish' %}">
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <form method="post" class="w-50 ml-auto mr-auto row card">
+                    {% csrf_token %}
+                    <div class="col-lg-12 pt-4">
+                        <label>Maxsulot</label>
+                        <select name="mavjud-maxsulot" class="form-control" id="selectPro"
+                            onchange="ChangeProduct(this)">
+                            <option disabled selected>...</option>
+                            {% for maxsulot in maxsulotlar %}
+                            <option value="{{maxsulot.id}}" data-price="{{maxsulot.narxi}}">{{maxsulot}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-lg-12 pt-4">
+                        <label>Omborga kelish narxi - 1kg/1m/1m2</label>
+                        <input type="number" name="narxi" id="price" step="any" class="form-control">
+                    </div>
+                    <div class="col-lg-12 pt-4">
+                        <label>Yangi kelgan maxsulot hajmi - kg/m/m2</label>
+                        <input type="number" required name="hajmi" id="hajm" step="any" class="form-control">
+                    </div>
+                    <div class="col-lg-12 pt-4">
+                        <label>Maxsulot kelgan sana</label>
+                        <input type="date" required name="sanasi" id="sana" class="form-control">
+                    </div>
+                    <div class="col-lg-12 py-4">
+                        <input type="submit" value="Maxsulotni qo'shish" class="col-lg-12 btn mt-4 btn-primary">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="container text-center pt-5">
+    <div class="row pt-5">
+        <div class="col-lg-12">
+            <h1 style="color: red;">Siz uchun kirish taqiqlangan.</h1>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+{% block script %}
+<script>
+    function ChangeProduct() {
+        var pro = document.getElementById('selectPro');
+        var selected = pro.options[pro.selectedIndex];
+        var narxi = selected.getAttribute('data-price');
+        $("#price").attr("value", narxi);
+    }
+</script>
+{% endblock script %}

@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block header %}
+<link rel="stylesheet" type="text/css" href="{% static 'vendor/datatables/css/dataTables.bootstrap4.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'vendor/datatables/css/buttons.bootstrap4.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'vendor/datatables/css/select.bootstrap4.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'vendor/datatables/css/fixedHeader.bootstrap4.css' %}">
+
+<style>
+    @media only screen and (max-width: 480px) {
+        .card > a > button {
+            font-size: 0.7rem !important;
+            width: 100% !important;
+        }
+        
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if request.user.is_staff %}
+<div class="dashboard-wrapper" style="height: 100%;">
+    <div class="container-fluid  dashboard-content" style="height: 100%;">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header pt-5 mt-2">
+                    <h2 class="pageheader-title">Yakunlanmagan buyurtmalar jadvali</h2>
+                    <div class="page-breadcrumb">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Rainglass boshqaruvchi
+                                        uchun buyurtmalar oynasi </a></li>
+
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="card">
+                    <h5 class="card-header">Nazoratdan o'tmagan</h5>
+                    <a href="{% url 'rainglass:yangibuyurtma' %}" style="position: absolute; right: 35px; top: 4px">
+                        <button class="btn btn-danger" style="width: 187px; float: right; font-size: 1.1em">
+                            Yangi buyurtma
+                        </button>
+                    </a>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <div class="row pb-2">
+                                <div class="d-inline-block pl-3  col-lg-2 col-md-2">
+                                    <form action="{% url 'rainglass:yakunlanmagan' %}" method="get">
+                                        <input type="text" class="form-control py-2" autocomplete="off" placeholder="qidirish..." name="q">
+                                        <button type="submit" class="d-none"></button>
+                                    </form>
+                                </div>
+                            </div>
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Buyurtmachi</th>
+                                        <th>Buyurtma nomi</th>
+                                        <th>Qabul qilingan sana</th>
+                                        <th>Yakuniy sana</th>
+                                        <th>Qoldi</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for buyurtma in nazoratsiz_buyurtmalar %}
+                                    <tr>
+                                        <td>{{ buyurtma.id }}</td>
+                                        <td><a href="{% url 'rainglass:buyurtmani-taxrirlash' buyurtma.id %}">
+                                                {{ buyurtma.buyurtmachi.first_name }}
+                                                {{buyurtma.buyurtmachi.last_name }}
+                                                {% if buyurtma.buyurtmachi.firma %} - {{ buyurtma.buyurtmachi.firma }}
+                                                {% endif %}
+                                            </a>
+                                        </td>
+                                        <td>{{ buyurtma.buyurtma_nomi }}</td>
+                                        <td>{{ buyurtma.qabul_qilingan_vaqt }}</td>
+                                        <td>{{ buyurtma.deadline }}</td>
+                                        {% with qoldi=buyurtma.deadline|sub:bugun %}
+                                        <td>{{ qoldi.days }} kun</td>
+                                        {% endwith %}
+                                        <td><a href="{{ buyurtma.get_absolute_url }}" class="btn toliq ">To'liq
+                                                ma'lumot</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Nazoratdan o'tgan</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <div class="row pb-2">
+                                <div class="d-inline-block pl-3  col-lg-2 col-md-2">
+                                    <form action="{% url 'rainglass:yakunlanmagan' %}" method="get">
+                                        <input type="text" class="form-control py-2" autocomplete="off" placeholder="qidirish..." name="q2">
+                                        <button type="submit" class="d-none"></button>
+                                    </form>
+                                </div>
+                            </div>
+                            <table class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Xolati</th>
+                                        <th>Buyurtmachi</th>
+                                        <th>Buyurtma nomi</th>
+                                        <th>Qabul qilingan sana</th>
+                                        <th>Yakuniy sana</th>
+                                        <th>Qoldi</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for buyurtma in muddati_tugaganlar %}
+                                    <tr>
+                                        <td>{{ buyurtma.id }}</td>
+                                        <td><span class="badge-dot badge-dark mr-1"></span></td>
+                                        <td><a href="{% url 'rainglass:buyurtmani-taxrirlash' buyurtma.id %}">{{ buyurtma.buyurtmachi.first_name }}
+                                                {{buyurtma.buyurtmachi.last_name }}
+                                                {% if buyurtma.buyurtmachi.firma %} - {{ buyurtma.buyurtmachi.firma }}
+                                                {% endif %}
+                                            </a>
+                                        </td>
+                                        <td>{{ buyurtma.buyurtma_nomi }}</td>
+                                        <td>{{ buyurtma.qabul_qilingan_vaqt }}</td>
+                                        <td>{{ buyurtma.deadline }}</td>
+                                        {% with qoldi=buyurtma.deadline|sub:bugun %}
+                                        <td>{{ qoldi.days }} kun</td>
+                                        {% endwith %}
+                                        <td><a href="{{ buyurtma.get_absolute_url }}" class="btn toliq">To'liq
+                                                ma'lumot</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% for buyurtma in oz_qolganlar %}
+                                    <tr>
+                                        <td>{{ buyurtma.id }}</td>
+                                        <td><span class="badge-dot badge-danger mr-1"></span></td>
+                                        <td><a href="{% url 'rainglass:buyurtmani-taxrirlash' buyurtma.id %}">{{ buyurtma.buyurtmachi.first_name }}
+                                                {{buyurtma.buyurtmachi.last_name }}
+                                                {% if buyurtma.buyurtmachi.firma %} - {{ buyurtma.buyurtmachi.firma }}
+                                                {% endif %}
+                                            </a>
+                                        </td>
+                                        <td>{{ buyurtma.buyurtma_nomi }}</td>
+                                        <td>{{ buyurtma.qabul_qilingan_vaqt }}</td>
+                                        <td>{{ buyurtma.deadline }}</td>
+                                        {% with qoldi=buyurtma.deadline|sub:bugun %}
+                                        <td>{{ qoldi.days }} kun</td>
+                                        {% endwith %}
+                                        <td><a href="{{ buyurtma.get_absolute_url }}" class="btn toliq ">To'liq
+                                                ma'lumot</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% for buyurtma in yaqin_qolganlar %}
+                                    <tr>
+                                        <td>{{ buyurtma.id }}</td>
+                                        <td><span class="badge-dot badge-warning mr-1"></span></td>
+                                        <td><a href="{% url 'rainglass:buyurtmani-taxrirlash' buyurtma.id %}">{{ buyurtma.buyurtmachi.first_name }}
+                                                {{buyurtma.buyurtmachi.last_name }}
+                                                {% if buyurtma.buyurtmachi.firma %} - {{ buyurtma.buyurtmachi.firma }}
+                                                {% endif %}
+                                            </a>
+                                        </td>
+                                        <td>{{ buyurtma.buyurtma_nomi }}</td>
+                                        <td>{{ buyurtma.qabul_qilingan_vaqt }}</td>
+                                        <td>{{ buyurtma.deadline}}</td>
+                                        {% with qoldi=buyurtma.deadline|sub:bugun %}
+                                        <td>{{ qoldi.days }} kun</td>
+                                        {% endwith %}
+                                        <td><a href="{{ buyurtma.get_absolute_url }}" class="btn toliq">To'liq
+                                                ma'lumot</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% for buyurtma in yetarli_qolganlar %}
+                                    <tr>
+                                        <td>{{ buyurtma.id }}</td>
+                                        <td><span class="badge-dot badge-success mr-1"></span></td>
+                                        <td><a href="{% url 'rainglass:buyurtmani-taxrirlash' buyurtma.id %}">{{ buyurtma.buyurtmachi.first_name }}
+                                                {{buyurtma.buyurtmachi.last_name }}
+                                                {% if buyurtma.buyurtmachi.firma %} - {{ buyurtma.buyurtmachi.firma }}
+                                                {% endif %}
+                                            </a>
+                                        </td>
+                                        <td>{{ buyurtma.buyurtma_nomi }}</td>
+                                        <td>{{ buyurtma.qabul_qilingan_vaqt }}</td>
+                                        <td>{{ buyurtma.deadline }}</td>
+                                        {% with qoldi=buyurtma.deadline|sub:bugun %}
+                                        <td>{{ qoldi.days }} kun</td>
+                                        {% endwith %}
+                                        <td><a href="{{ buyurtma.get_absolute_url }}" class="btn toliq">To'liq
+                                                ma'lumot</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% else %}
+<div class="container text-center pt-5">
+    <div class="row pt-5">
+        <div class="col-lg-12 pt-5">
+            <h1 style="color: red;">Siz uchun kirish taqiqlangan.</h1>
+        </div>
+    </div>
+</div>
+<meta http-equiv="refresh" content="1;url={% url 'rainglass:i-yakunlanmagan' %}">
+{% endif %}
+{% endblock %}
+{% block script %}
+<script src="{% static 'vendor/multi-select/js/jquery.multi-select.js' %}"></script>
+<script src="{% static 'libs/js/my_table.js' %}"></script>
+<script src="{% static 'vendor/datatables/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script src="{% static 'vendor/datatables/js/buttons.bootstrap4.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/js/data-table.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/rowgroup/1.0.4/js/dataTables.rowGroup.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
+<script src="https://cdn.datatables.net/fixedheader/3.1.5/js/dataTables.fixedHeader.min.js"></script>
+{% endblock %}

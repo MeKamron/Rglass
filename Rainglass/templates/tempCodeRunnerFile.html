@@ -1,0 +1,19 @@
+<div class="col-lg-6 pt-5">
+                        <div class="col-lg-6 pt-5">
+                            <label>Maxsulot</label>
+                            <select class="form-control" name="maxsulot" id="profil">
+                                <option value=""  disabled selected>...</option>
+                                    {% for maxsulot in maxsulotlar %}
+                                        <option value="{{ maxsulot.id }}">{{ maxsulot }}</option>
+                                    {% endfor %}
+                            </select>
+                        </div>
+                        
+                            <div class="col-lg-6 pt-5">
+                                <label>Buyurtmaga kerak</label>
+                                <input type="number" step="any" name="kerakli-hajm" class="form-control">
+                            </div>
+                        <div class="btn btn-success mt-2 col-sm-12">
+                            Yana
+                        </div>
+                    </div>

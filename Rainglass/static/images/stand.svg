@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:svg="http://www.w3.org/2000/svg" id="svg3201" viewBox="0 0 263.65 580.84" version="1.0">
+  <g id="layer1" transform="translate(-225.32 -228.86)">
+    <path id="path3724" stroke-linejoin="round" d="m425.91 598.78v205.28h-61.5v-204.53h-14.5v204.53h-61.5v-381.06h-16.07v151.06h-41.5v-152.28c0-24.93 20.57-52.28 45.5-52.28h161.6c25.4 0 45.5 28.88 45.5 54.28v150.28h-41.5v-151.06h-16.03v175.78zm-68.6-364.28c-36.84 0-66.75 29.9-66.75 66.75s29.91 66.75 66.75 66.75c36.85 0 66.75-29.9 66.75-66.75s-29.9-66.75-66.75-66.75z" stroke="#000" stroke-linecap="round" stroke-width="1.5"/>
+  </g>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+        <cc:license rdf:resource="http://creativecommons.org/licenses/publicdomain/"/>
+        <dc:publisher>
+          <cc:Agent rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>man</dc:title>
+        <dc:date>2009-02-18T21:15:04</dc:date>
+        <dc:description>A symbolic silhouette like those  you can find on toilet doors.</dc:description>
+        <dc:source>http://openclipart.org/detail/21625/man-by-ericlemerdy</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>ericlemerdy</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>clip art</rdf:li>
+            <rdf:li>clipart</rdf:li>
+            <rdf:li>image</rdf:li>
+            <rdf:li>man</rdf:li>
+            <rdf:li>media</rdf:li>
+            <rdf:li>png</rdf:li>
+            <rdf:li>public domain</rdf:li>
+            <rdf:li>silhouette</rdf:li>
+            <rdf:li>svg</rdf:li>
+            <rdf:li>symbolic</rdf:li>
+            <rdf:li>toilet</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/>
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Barcha buyurtmalar{% endblock %}
+
+{% block content %}
+{% if request.user.is_staff %}
+<div class="dashboard-main-wrapper">
+    <!-- ============================================================== -->
+    <!-- wrapper  -->
+    <!-- ============================================================== -->
+    <div class="dashboard-wrapper">
+        <div class="dashboard-ecommerce">
+            <div class="container-fluid dashboard-content " style="width: 100%;">
+                <!-- ============================================================== -->
+                <!-- pageheader  -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="page-header">
+                            <h2 class="pageheader-title text-center">Barcha buyurtmalar</h2>
+                            <div class="page-breadcrumb">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ecommerce-widget">
+                    <div class="row">
+                         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="card">
+                                <div class="card-body text-center" style="background-color: #1f202b;">
+                                    <h5 style="color: #fff; ">Muddati o'tib ketgan
+                                        <i style="color: #fff" class="fas fa-1x svg ml-2 fa-space-shuttle"></i>
+                                    </h5>
+                                    <div class="metric-value">
+                                        <h1 class="mb-1" style="color: #fff;">{{ muddati_tugaganlar|length }}</h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+<div class="container text-center pt-5">
+    <div class="row pt-5">
+        <div class="col-lg-12">
+            <h1 style="color: red;">Siz uchun kirish taqiqlangan.</h1>
+        </div>
+       
+    </div>
+</div>
+{% endif %}
+{% endblock %}

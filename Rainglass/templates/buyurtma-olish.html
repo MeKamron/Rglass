@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tags %}
+{% block title %}Rain Glass{% endblock %}
+
+{% block header %}
+<style>
+    .nav-divider {
+        padding-top: 0;
+    }
+
+    .form-control[readonly] {
+        background-color: #fff !important;
+    }
+    .messages {
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .success {
+        background-color: #18b518;
+        color: #fff;
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .error {
+        background-color: #f1314b;
+        color: #fff;
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+    
+</style>
+{% endblock %}
+
+{% block content %}
+{% if request.user.is_staff %}
+<div class="container py-5 mt-5">
+    <div class="dashboard-main-wrapper pt-0">
+        <div class="dashboard-wrapper">
+            <div class="dashboard-ecommerce">
+                <div class="container-fluid dashboard-content " style="width: 100%; ">
+                    <h2 class="pageheader-title text-center mb-3 pb-5">Yangi buyurtma qo'shish</h2>
+                    {% if messages %}
+                    <div class="messages text-center">
+                        {% for message in messages %}
+                        <h3 {% if message.tags %} class="{{ message.tags }} p-4 text-center" {% endif %}>
+                            {% if message.tags == "success" %}
+                            <i class="fas fa-2x fa-check text-center"></i>
+                            {% else %}
+                            <i class="fas fa-2x fa-times"></i>
+                            {% endif %}
+                        </h3>
+                        <h3>{{ message }}</h3>
+                        {% if message.tags == "success" %}
+                        <meta http-equiv="refresh" content="2;url={% url 'rainglass:yakunlanmagan' %}">
+                        {% else %}
+                        <meta http-equiv="refresh" content="3;url={% url 'rainglass:yakunlanmagan' %}">
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <form method="post" class="row" id="buyurtmaForm" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="col-lg-12 row py-3 pr-0">
+                            <div class="col-lg-5 col-md-5 col-sm-5 pr-2">
+                                <label>Maxsulot</label>
+                                <select class="form-control" name="maxsulot" id="maxsulot">
+                                    <option disabled selected>...</option>
+                                    {% for m in maxsulotlar %}
+                                    <option value="{{ m }}" data-hajm="{{m.hajm}}" data-id="{{m.id}}">
+                                        {{ m }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-lg-5 b-kerak col-md-5 col-sm-5 pl-4 pr-1">
+                                <label>Buyurtmaga kerak</label>
+                                <input type="number" name="buyurtmaga-kerak" id="buyurtmaga-kerak" step="any"
+                                    class="form-control">
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2 pt-4 pr-0" id="createButtonDiv">
+                                <p class="btn btn-warning w-100" id="createButton">qo'shish </p>
+                            </div>
+                        </div>
+
+                        <!-- --------------------------------------------------- -->
+                        <!-- Kerakli maxsulotlar -->
+                        <!-- --------------------------------------------------- -->
+                        <div class="col-lg-12 mb-5">
+                            <div id="kerakliMaxList">
+
+                            </div>
+                        </div>
+                        <!-- --------------------------------------------------- -->
+                        <!-- End of Kerakli maxsulotlar -->
+                        <!-- --------------------------------------------------- -->
+
+                        <div class="col-lg-12 mt-5 b-olish-buyurtmachi">
+                            <label>Buyurtmachi</label>
+                            <select class="form-control" required name="buyurtmachi">
+                                {% if new_client %}
+                                <option value="{{ new_client.id }}">{{ new_client.first_name }}
+                                    {{ new_client.last_name }}
+                                    {% if new_client.firma %} - {{ new_client.firma }}{% endif %}
+                                </option>
+                                {% for b in buyurtmachilar|exclude:new_client %}
+                                <option value="{{ b.id }}">{{ b.first_name }} {{ b.last_name }}
+                                    {% if b.firma %} - {{ b.firma }}{% endif %}
+                                </option>
+                                {% endfor %}
+                                {% else %}
+                                <option value="" disabled selected>...</option>
+                                {% for b in buyurtmachilar %}
+                                <option value="{{ b.id }}">{{ b.first_name }} {{ b.last_name }}
+                                    {% if b.firma %} - {{ b.firma }}{% endif %}
+                                </option>
+                                {% endfor %}
+                                {% endif %}
+                            </select>
+                            <a href="{% url 'rainglass:yangi-buyurtmachi' %}" class="btn mt-2 btn-warning"
+                                style="border-radius: 5px;">
+                                Yangi buyurtmachi +
+                            </a>
+                        </div>
+
+                        <div class="col-lg-12 pt-4">
+                            <label>Buyurtma nomi</label>
+                            <input type="text" autocomplete="off" name="buyurtma-nomi" required class="form-control">
+                        </div>
+                        <div class="col-lg-6 pt-4">
+                            <label>Buyurtma eni</label>
+                            <input type="number" name="buyurtma-eni" step="any" required class="form-control">
+                        </div>
+                        <div class="col-lg-6 pt-4">
+                            <label>Buyurtma bo'yi</label>
+                            <input type="number" name="buyurtma-boyi" step="any" required class="form-control">
+                        </div>
+                        <div class="col-lg-6 pt-4">
+                            <label>Ochiladi</label>
+                            <input type="text" name="ochiladi" class="form-control">
+                        </div>
+                        <div class="col-lg-6 pt-4">
+                            <label>Buyurtma soni</label>
+                            <input type="number" name="buyurtma-soni" required step="any" class="form-control">
+                        </div>
+                        <div class="col-lg-12 pt-5">
+                            <label>Buyurtma chizmasi</label>
+                            <input type="file" name="rasm" required class="form-control">
+                        </div>
+                        <div class="col-lg-6 pt-4">
+                            <label>Qabul qilingan sana</label>
+                            <input type="date" name="qabul-sanasi" required class="form-control">
+                        </div>
+                        <div class="col-lg-6 pt-4">
+                            <label>Yakuniy sana</label>
+                            <input type="date" name="deadline" required class="form-control">
+                        </div>
+                        <div class="col pt-5">
+                            <label>Sotilish protsenti</label>
+                            <input type="number" name="sotilish-protsenti" required step="any" class="form-control">
+                        </div>
+                        <div class="col-lg-4 pt-5">
+                            <label>Ishchi tolovi</label>
+                            <input type="number" step="any" name="ishchi-tolovi" required class="form-control">
+                        </div>
+                        <div class="col-lg-4 pt-5">
+                            <label>Montaj tolovi</label>
+                            <input type="number" step="any" name="montaj-tolovi" class="form-control">
+                        </div>
+
+                        <div class="col-lg-12 pt-5">
+                            <label>Izox (ixtiyoriy)</label>
+                            <textarea name="izox" class="form-control" cols="30" rows="5"></textarea>
+                        </div>
+
+                        <div class="col-lg-4 pt-5">
+                            <input type="checkbox" name="ishchi-nazorati" class="ml-1">
+                            <label>Ishchi nazoratidan otkazildi</label>
+                        </div>
+                        <div class="col-lg-4 pt-5">
+                            <input type="checkbox" name="tayyor" class="ml-1">
+                            <label>Buyurtma tayyor bo'ldi</label>
+                        </div>
+                        <div class="col-lg-4 pt-5">
+                            <input type="checkbox" name="yopildi" class="ml-1">
+                            <label>Buyurtma to'liq yopildi</label>
+                        </div>
+                        <div class="col-lg-12 ">
+                            <input type="submit" id="submitButton" value="Buyurtmani saqlash"
+                                class="col-lg-12 btn mt-4 btn-primary">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="container text-center pt-5">
+    <div class="row pt-5">
+        <div class="col-lg-12">
+            <h1 style="color: red;">Siz uchun kirish taqiqlangan.</h1>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock  %}
+
+{% block script %}
+
+<script>
+    $(document).ready(function () {
+        // var csrf = $("input[name=csrfmiddlewaretoken]").val();
+        $("#createButton").click(function () {
+            var maxsulot = $("#maxsulot").val();
+            var maxsulot_id = $("#maxsulot option:selected").data("id");
+            var buyurtmagaKerak = $("#buyurtmaga-kerak").val();
+            var maxsulot_hajm = $("#maxsulot option:selected").data("hajm");
+            var mavjud = false;
+            $("#kerakliMaxList :input").each(function () {
+                if (maxsulot == $(this).val()) {
+                    mavjud = true;
+                }
+            });
+            if (maxsulot != null && buyurtmagaKerak != 0) {
+
+                if (mavjud != true) {
+                    if (maxsulot_hajm >= parseFloat(buyurtmagaKerak)) {
+                        $("#buyurtmaForm")[0].reset();
+                        $("#kerakliMaxList").append('<div class="row" id="km-card" data-id="' + maxsulot_id + '"><div class="col-lg-5 col-md-5 col-sm-5 pt-4"><input type="text"  readonly="true" value="' + maxsulot + '" name="' + maxsulot + '" class="form-control"><input type="hidden" value="' + maxsulot_id + '" name="' + maxsulot + '-id" ></div><div class="col-lg-5 col-md-5 col-sm-5 pt-4"><input type="number" readonly="true" step="any" name="' + maxsulot + '-hajm" value="' + buyurtmagaKerak + '" class="form-control"></div><div class="col-lg-2 col-md-2 col-sm-2 pt-4 pl-0"><p class="btn btn-danger w-100" id="delButton" data-id="' + maxsulot_id + '">ochirish</p></div></div>');
+                    } else {
+                        alert("Omborda buncha maxsulot mavjud emas!");
+                    }
+                } else {
+                    alert("Bu maxsulot avval qo'shilgan.");
+                }
+            }
+        });
+
+        $("#kerakliMaxList").on('click', '#delButton', function (event) {
+            event.stopPropagation();
+            var dataId = $(this).data("id");
+            $('#km-card[data-id="' + dataId + '"]').remove();
+        });
+    });
+
+</script>
+
+{% endblock %}

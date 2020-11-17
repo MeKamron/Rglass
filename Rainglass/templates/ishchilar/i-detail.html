@@ -1,0 +1,437 @@
+{% extends 'ishchilar/base2.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block title %}Alorithm Gateway{% endblock %}
+
+{% block header %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+
+    body {
+        background-color: #fff;
+    }
+
+    .img-box {
+        width: 95%;
+    }
+
+    .img-box1 {
+        width: 80%;
+    }
+
+    .card-img {
+        border: 1px solid #efefef;
+        border-radius: 5px;
+        width: 100%;
+        height: 240px;
+        object-fit: cover;
+        object-position: 50% 50%;
+    }
+
+    .real-img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .malumotlar {
+        padding-top: .2em;
+        height: 100%;
+    }
+
+    .card-title {
+        margin-bottom: 0px !important;
+        font-size: 1em;
+    }
+
+    .malumotlar h4 {
+        letter-spacing: 1px;
+        font-weight: 500;
+
+    }
+
+    .malumotlar h4 span {
+        letter-spacing: 0.1em;
+        font-weight: 400;
+
+    }
+
+    .card {
+        padding: 1em;
+        background-color: #f6f6ff;
+    }
+
+    .card-body {
+        padding: 1.1em 0 0 0.5em;
+
+    }
+
+    .card-text {
+        padding-top: 1em;
+    }
+
+    tr {
+        width: 100%;
+    }
+
+    tr:nth-child(odd) {
+        background-color: #e8e9fb;
+    }
+
+    th {
+        width: 50%;
+    }
+
+    .modal-body {
+        padding: 0.2rem;
+    }
+
+    .b-info {
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        display: inline-block;
+        padding-top: 47px;
+    }
+
+    .b-info div {
+        margin-bottom: 3rem;
+        padding: 1em 0;
+    }
+
+    .b-info div:after {
+        content: "";
+        display: block;
+        padding-top: 10px;
+        width: 50%;
+        border-bottom: 1px solid red;
+        
+    }
+
+    .b-info h2 {
+        font-size: 2.3rem;
+    }
+
+    i {
+        color: #3b4efd;
+    }
+
+    .table td,
+    .table th {
+        padding: 11px;
+        vertical-align: middle;
+        border-top: 1px solid #e6e6f2;
+        font-weight: normal;
+        font-size: 15px;
+    }
+    .modal-dialog{
+        margin-top: 5rem;
+        margin-left: 30%;
+    }
+
+    @media only screen and (max-width: 1024px) {
+        .dashboard-wrapper {
+            padding-left: 1em !important;
+        }
+
+        .img-box1 {
+            width: 95%;
+        }
+        .b-info h2 {
+            font-size: 1.8rem;
+        }
+    }
+    @media only screen and (max-width: 768px) {
+        .dashboard-wrapper {
+            padding-left: 1em !important;
+        }
+        .img-box1 {
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .modal-dialog{
+            margin-left: 15%;
+            width: 70%;
+        }
+        .modal-content {
+            margin-top: 7.6rem;
+        }
+        .container-fluid > .pl-4 {
+            padding-left: 0px !important;
+            margin-top: 0px !important;
+        }
+        .container-fluid > .pl-4 > .mt-5 {
+            margin-top: 10px !important;
+        }
+        .b-info {
+            text-align: center;
+        }
+        .b-info div {
+            margin-bottom: 1rem;
+        }
+        .b-info div:after{
+            text-align: center !important;
+        margin-left: auto;
+        margin-right: auto;
+        }
+    }
+    @media only screen and (max-width: 576px) {
+        .dashboard-wrapper {
+            padding-left: 1em !important;
+        }
+        .img-box1 {
+            width: 100%;
+            margin-left: auto;
+        }
+        .modal-dialog{
+
+            margin-left: 15%;
+            width: 70%;
+        }
+        .modal-content {
+            margin-top: 7.6rem;
+        }
+        .container-fluid > .pl-4 {
+            padding-left: 0px !important;
+            margin-top: 0px !important;
+        }
+        .container-fluid > .pl-4 > .mt-5 {
+            margin-top: 10px !important;
+        }
+        .b-info h2 {
+            font-size: 1.4rem;
+        }
+        .b-info h3 {
+            font-size: 1rem;
+        }
+        h2 {
+            font-size: 1.4rem;
+        }
+
+    }
+    @media only screen and (max-width: 576px){
+        h2 {
+            font-size: 1.1rem;
+        }
+        .b-buyurtma h5 {
+            font-size: 0.7rem;
+            color: grey;
+        }
+        .b-buyurtma i {
+            display: none;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper" style="height: 100%;">
+    <div class="container-fluid dashboard-content pt-5 ">
+        <div class="row mt-4 pl-4">
+            <div class="col-lg-6 mt-5">
+                <div class="card img-box1">
+                    <img src="{{ buyurtma.picture.url }}" class="card-img" alt="...">
+                    <button type="button" class="btn mt-2 btn-primary" data-toggle="modal" data-target="#exampleModal">
+                        Toliq rasmni ko'rish
+                    </button>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Buyurtma chizmasi</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <img src="{{ buyurtma.picture.url }}" class="real-img" alt="...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-2">
+                        <table class="table" style="width:100%">
+                            <tbody>
+                                <tr>
+                                    <th>Buyurtma nomi</th>
+                                    <td>{{ buyurtma.buyurtma_nomi }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Buyurtma soni</th>
+                                    <td>{{ buyurtma.buyurtma_soni }} ta</td>
+                                </tr>
+                                <tr>
+                                    <th>Buyurtma eni</th>
+                                    <td>{{ buyurtma.eni }} m</td>
+                                </tr>
+                                <tr>
+                                    <th>Buyurtma boyi</th>
+                                    <td>{{ buyurtma.boyi }} m</td>
+                                </tr>
+                                <tr>
+                                    <th>Buyurtma yuzasi</th>
+                                    <td>{{ buyurtma|yuzasi|floatformat:"3" }} m2</td>
+                                </tr>
+                                <tr>
+                                    <th>Ochilishi</th>
+                                    <td>{{ buyurtma.ochilishi }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Qabul qilingan sana</th>
+                                    <td>{{ buyurtma.qabul_qilingan_vaqt }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Yakuniy sana</th>
+                                    <td>{{ buyurtma.deadline }}</td>
+                                </tr>
+                                <tr>
+                                    {% with qoldi=buyurtma.deadline|sub:bugun %}
+                                    <th>Qoldi </th>
+                                    <td
+                                        style="color:{% if qoldi.days <= 5 %} red {% elif qoldi.days <= 10 %} #f3b600 {% else %} green {% endif %}">
+                                        {{ qoldi.days }} kun</td>
+                                    {% endwith %}
+                                </tr>
+                                <tr>
+                                    <th style="width: 30%;">Izox:</th>
+                                    <td>
+                                        <p class="card-text">
+                                            {% if buyurtma.izox %}
+                                            {{ buyurtma.izox }}
+                                            {% else %}
+                                            ...
+                                            {% endif %}
+                                        </p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="b-info col-lg-6">
+                <div>
+                    <i class="far mb-3 fa-handshake fa-2x"></i>
+                    <h6>Client</h6>
+                    <h2 class="mt-2" style="line-height: 40px;">{{ buyurtma.buyurtmachi.first_name }}
+                        {{ buyurtma.buyurtmachi.last_name }}</h2>
+                    <h3>{{ buyurtma.buyurtmachi.firma }}</h3>
+                </div>
+                <div>
+                    <i class="fas mb-3 fa-2x fa-mobile-alt"></i>
+                    <h6>Contact</h6>
+                    <h2><a href="tel://{{ buyurtma.buyurtmachi.phone_number }}"
+                            style="color: #3d405c;">{{ buyurtma.buyurtmachi.phone_number }}</a></h2>
+                </div>
+                <div>
+                    <i class="fas mb-3 fa-2x fa-map-marker-alt"></i>
+                    <h6>Adress</h6>
+                    <h2>{{ buyurtma.buyurtmachi.adress }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row my-5 b-buyurtma text-center">
+            <div class="col-lg-12 pb-2 pt-5">
+                <h2 class="text-center" style="font-family: 'Roboto', sans-serif;">
+                    <i class="fas fa-2x fa-sort-amount-down mr-2"></i>
+                    Shu buyurtmachiga tegishli boshqa buyurtmalar
+                </h2>
+                {% if buyurtma.buyurtmachi.buyurtmalar.all|exclude:buyurtma|length == 0 %}
+                <h5 class="text-center card-text mb-5">Boshqa buyurtmalar mavjud emas...</h5>
+                {% endif %}
+            </div>
+            {% for buy in buyurtma.buyurtmachi.buyurtmalar.all|exclude:buyurtma %}
+            <div class="col-lg-4 mt-5">
+                <div class="card img-box">
+                    <img src="{{ buy.picture.url }}" class="card-img" alt="...">
+                    <button type="button" class="btn mt-2 btn-primary" data-toggle="modal" data-target="#Modal{{buy.id}}">
+                        Toliq rasmni ko'rish
+                    </button>
+                    <div class="modal fade " id="Modal{{buy.id}}" tabindex="-1" aria-labelledby="ModalLabel{{buy.id}}"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="ModalLabel{{buy.id}}">Buyurtma chizmasi</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <img src="{{ buy.picture.url }}" class="real-img" alt="...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-2">
+                        <table class="table" style="width:100%">
+                            <tbody>
+                                <tr>
+                                    <th>Buyurtma nomi</th>
+                                    <td>{{ buy.buyurtma_nomi }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Buyurtma soni</th>
+                                    <td>{{ buy.buyurtma_soni }} ta</td>
+                                </tr>
+                                <tr>
+                                    <th>Buyurtma eni</th>
+                                    <td>{{ buy.eni }} m</td>
+                                </tr>
+                                <tr>
+                                    <th>Buyurtma boyi</th>
+                                    <td>{{ buy.boyi }} m</td>
+                                </tr>
+                                <tr>
+                                    <th>Buyurtma yuzasi</th>
+                                    <td>{{ buy|yuzasi|floatformat:"3" }} m2</td>
+                                </tr>
+                                <tr>
+                                    <th>Qabul qilingan sana</th>
+                                    <td>{{ buy.qabul_qilingan_vaqt }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Yakuniy sana</th>
+                                    <td>{{ buy.deadline }}</td>
+                                </tr>
+                                <tr>
+                                    {% with qoldi=buy.deadline|sub:bugun %}
+                                    <th>Qoldi </th>
+                                    <td
+                                        style="color:{% if qoldi.days <= 5 %} red {% elif qoldi.days <= 10 %} #f3b600 {% else %} green {% endif %}">
+                                        {{ qoldi.days }} kun</td>
+                                    {% endwith %}
+                                </tr>
+                                <tr>
+                                    <th>Izox:</th>
+                                    <td>
+                                        {% if buy.izox %}
+                                        {{ buy.izox }}
+                                        {% else %}
+                                        ...
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    $(document).ready(function () {
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#myInput').trigger('focus')
+        });
+    });
+
+</script>
+{% endblock %}

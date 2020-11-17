@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}{{maxsulot.maxsulot}}{% endblock %}
+
+{% block header %}
+<style>
+    label {
+        padding-left: 2px;
+    }
+
+    .messages {
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .success {
+        background-color: #18b518;
+        color: #fff;
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+    @media only screen and (max-width: 768px) {
+        .w-50 {
+            width: 85% !important;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if request.user.is_staff %}
+<div class="dashboard-main-wrapper pt-5">
+    <div class="dashboard-wrapper">
+        <div class="dashboard-ecommerce">
+            <div class="container-fluid dashboard-content " style="width: 100%; ">
+                <h2 class="pageheader-title text-center mb-3 pb-5">Maxsulot - {{ maxsulot.maxsulot }}</h2>
+                {% if messages %}
+                <div class="messages text-center">
+                    {% for message in messages %}
+                    <h3 {% if message.tags %} class="{{ message.tags }} p-4 text-center" {% endif %}>
+                        {% if message.tags == "success" %}
+                        <i class="fas fa-2x fa-check text-center"></i>
+                        {% else %}
+                        <i class="fas fa-2x fa-times"></i>
+                        {% endif %}
+                    </h3>
+                    <h3>{{ message }}</h3>
+                    {% if message.tags == "success" %}
+                    <meta http-equiv="refresh" content="2;url={% url 'rainglass:ombor-tarix' %}">
+                    {% else %}
+                    <meta http-equiv="refresh" content="2;url={% url 'rainglass:maxsulot-taxrirlash' maxsulot.id %}">
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <form method="post" class="w-50 ml-auto mr-auto row">
+                    {% csrf_token %}
+                    <div class="col-lg-12 pt-4">
+                        <label>Maxsulot nomi</label>
+                        <input type="text" autocomplete="off" required name="maxsulot" value="{{ maxsulot.maxsulot }}"
+                            class="form-control">
+                    </div>
+                    <div class="col-lg-12 pt-4">
+                        <label>Omborga kelish narxi - 1kg/1m/1m2</label>
+                        <input type="number" required name="narxi" step="any" value="{{ maxsulot.narxi }}"
+                            class="form-control">
+                    </div>
+                    <div class="col-lg-12 pt-4">
+                        <label>Yangi kelgan maxsulot hajmi - kg/m/m2</label>
+                        <input type="number" required name="hajmi" step="any" value="{{ maxsulot.hajm }}"
+                            class="form-control">
+                    </div>
+                    <div class="col-lg-12 pt-4">
+                        <label>Maxsulot kelgan sana</label>
+                        <input id="sana" type="date" value="{{ maxsulot.qabul_sanasi|date:'Y-m-d' }}" required
+                            name="sanasi" class="form-control">
+                    </div>
+                    <div class="col-lg-12 pt-4">
+                        <input type="submit" value="O'zgarishlarni saqalash" class="col-lg-12 btn mt-4 btn-primary">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="container text-center pt-5">
+    <div class="row pt-5">
+        <div class="col-lg-12">
+            <h1 style="color: red;">Siz uchun kirish taqiqlangan.</h1>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

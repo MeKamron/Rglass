@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+{% block title %}Eng yangi qo'shilgan{% endblock %}
+
+{% block header %}
+<style>
+    label {
+        padding-left: 2px;
+    }
+
+    .messages {
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .success {
+        background-color: #18b518;
+        color: #fff;
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .error {
+        background-color: #f1314b;
+        color: #fff;
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .plus {
+
+        padding: 7px 13px 7px 9px;
+    }
+    @media only screen and (max-width: 360px) {
+        .yangi-max-turi {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if request.user.is_staff %}
+<div class="dashboard-main-wrapper pt-5">
+    <div class="dashboard-wrapper">
+        <div class="dashboard-ecommerce">
+            <div class="container-fluid dashboard-content " style="width: 100%; ">
+                <h2 class="pageheader-title text-center mb-3 pb-5">Omborga yangi maxsulot qo'shish</h2>
+                {% if messages %}
+                <div class="messages text-center">
+                    {% for message in messages %}
+                    <h3 {% if message.tags %} class="{{ message.tags }} p-4 text-center" {% endif %}>
+                        {% if message.tags == "success" %}
+                        <i class="fas fa-2x fa-check text-center"></i>
+                        {% else %}
+                        <i class="fas fa-2x fa-times"></i>
+                        {% endif %}
+                    </h3>
+                    <h3>{{ message }}</h3>
+                    {% if message.tags == "success" %}
+                    <meta http-equiv="refresh" content="2;url={% url 'rainglass:ombor' %}">
+                    {% else %}
+                    <meta http-equiv="refresh" content="4;url={% url 'rainglass:omborga-qoshish' %}">
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <form method="post" class="w-50 ml-auto mr-auto row card p-2">
+                    {% csrf_token %}
+                    <div class="col-lg-12">
+                        <label>Maxsulot turi</label>
+
+                        <select name="turi" class="form-control" id="selectPro">
+                            {% if yangi_tur %}
+                            <option value="{{ yangi_tur.id }}">{{ yangi_tur }}</option>
+                            {% for tur in turlar|exclude:yangi_tur %}
+                            <option value="{{tur.id}}">{{tur}}</option>
+                            {% endfor %}
+                            {% else %}
+                            <option disabled selected>...</option>
+                            {% for tur in turlar %}
+                            <option value="{{tur.id}}">{{tur}}</option>
+                            {% endfor %}
+                            {% endif %}
+
+                        </select>
+                        <a href="{% url 'rainglass:turga-qoshish' %}" class="btn btn-success mt-2 yangi-max-turi"
+                            style="border-radius: 5px;">Yangi maxsulot turi +</a>
+                    </div>
+                    <div class="col-lg-12 pt-4">
+                        <label>Nomi</label>
+                        <input name="nomi" autocomplete="off" required class="form-control">
+                    </div>
+                    <div class="col-lg-12 pt-4">
+                        <label>Narx</label>
+                        <input type="number" required name="narxi" step="any" class="form-control">
+                    </div>
+                    <div class="col-lg-12 pt-4">
+                        <label>Hajm- kg/m/m2</label>
+                        <input type="number" required name="hajmi" step="any" class="form-control">
+                    </div>
+                    <div class="col-lg-12 pt-4">
+                        <label>Sana</label>
+                        <input type="date" required name="sanasi" class="form-control">
+                    </div>
+                    <div class="col-lg-12 pt-4">
+                        <input type="submit" value="Maxsulotni qo'shish" class="col-lg-12 btn mt-4 btn-primary">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="container text-center pt-5">
+    <div class="row pt-5">
+        <div class="col-lg-12">
+            <h1 style="color: red;">Siz uchun kirish taqiqlangan.</h1>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

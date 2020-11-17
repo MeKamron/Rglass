@@ -1,0 +1,15 @@
+<div class="pagination d-inline-block pb-2 col-lg-10 col-md-10">
+    {% if page.has_previous %}
+        <a href="?page={{ page.previous_page_number }}" class="btn btn-success">oldingi</a>
+    {% else %}
+        <a href="#" class="btn btn-success">oldingi</a>
+    {% endif %}
+    <div class="current d-inline-block">
+        <p class="btn btn-primary">{{ page.number }}</p>
+    </div>
+    {% if page.has_next %}
+        <a href="?page={{ page.next_page_number }}" class="btn btn-success">keyingi</a>
+    {% else %}
+        <a href="#" class="btn btn-success">keyingi</a>
+    {% endif %}
+</div>

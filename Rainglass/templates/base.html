@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+    <link href="{% static 'vendor/fonts/circular-std/style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'libs/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/fonts/fontawesome/css/fontawesome-all.css' %}">
+    <link rel="stylesheet"
+        href="{% static 'vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/fonts/flag-icon-css/flag-icon.min.css' %}">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+    <title>Rain Glass</title>
+    {% block header %}
+    <style>
+        #buyurtmalar::after {
+
+            transition: transform .35s ease, opacity .35s ease;
+            opacity: 0.9;
+            display: inline-block;
+            width: 0;
+            height: 0;
+            position: absolute;
+            right: 20px;
+            vertical-align: 0.255em;
+            content: "";
+            border-top: 0.3em solid;
+            border-right: 0.3em solid transparent;
+            border-bottom: 0;
+            border-left: 0.3em solid transparent;
+        }
+
+        #buyurtmalar[aria-expanded="false"]:after {
+            transform: rotate(-90deg);
+        }
+
+        @media only screen and (max-width: 1024) {}
+    </style>
+    {% endblock %}
+</head>
+
+<body>
+    <div class="dashboard-header">
+        <nav class="navbar pl-4 pr-4 navbar-expand-lg bg-white fixed-top" style="z-index:99999;">
+            <img src="{% static 'images/rainglass.png' %}" style="height: 50px; width: 50px;">
+            <a href="{% url 'rainglass:yakunlanmagan' %}" style="color: #00b8ff; font-size: 25px;">RainGlass</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse " id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto navbar-right-top">
+                    <li class="nav-item">
+                        <a href="{% url 'rainglass:logout' %}">
+                            <div class="btn btn-outline-danger">Logout</div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <!-- ============================================================== -->
+    <!-- left sidebar -->
+    <!-- ============================================================== -->
+    <div class="nav-left-sidebar sidebar-dark">
+        <div class="menu-list">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav flex-column">
+                        <li class="nav-divider">
+                            Menu
+                        </li>
+                        <li class="nav-item bolimlar ">
+                            <a class="nav-link" href="{% url 'rainglass:ombor' %}"><i class="fas fa-warehouse"></i>
+                                Ombor nazorati</a>
+                        </li>
+                        <li class="nav-item bolimlar ">
+                            <a class="nav-link" href="{% url 'rainglass:buyurtmachi' %}"><i
+                                    class="fas fa-handshake"></i> Buyurtmachilar</a>
+                        </li>
+                        <li class="nav-item bolimlar nav-link" data-toggle="collapse" id="buyurtmalar"
+                            data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            <i class="fas fa-shopping-cart"></i> Buyurtmalar
+                        </li>
+                        <li class="nav-item bolimlar collapse pl-3 " id="collapseExample">
+                            <a class="nav-link " href="{% url 'rainglass:yakunlanmagan' %}">Yakunlanmagan</a>
+                            <a class="nav-link" href="{% url 'rainglass:yakunlangan' %}">Yakunlangan</a>
+                        </li>
+
+                        <li class="nav-item bolimlar">
+                            <a class="nav-link" href="{% url 'rainglass:ishchilar' %}"><i class="fas fa-user"></i>
+                                Ishchilar</a>
+                        </li>
+                        <li class="nav-item bolimlar">
+                            <a class="nav-link" href="{% url 'rainglass:davomad' %}"><i class="fas fa-table"></i>
+                                Davomad</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+    {% block content %}
+    {% endblock content %}
+    <div class="footer fixed-bottom">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ml-auto mr-auto">
+                    Copyright © 2020. Designed by <a style="color:#ff407b;"
+                        href="http://algorithmgateway.com/">Algorithm
+                        Gateway.</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'vendor/jquery/jquery-3.3.1.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2.2.1/src/js.cookie.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    {% block script %}
+    {% endblock %}
+    <!-- bootstap bundle js -->
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.js' %}"></script>
+    <!-- slimscroll js -->
+    <script src="{% static 'vendor/slimscroll/jquery.slimscroll.js' %}"></script>
+    <!-- main js -->
+    <script src="{% static 'libs/js/main-js.js' %}"></script>
+    <!-- sparkline js -->
+    <script src="{% static 'libs/js/dashboard-ecommerce.js' %}"></script>
+    <script src="{% static 'libs/js/dashboard-ecommerce.js' %}"></script>
+    <script src="{% static 'libs/js/dashboard-ecommerce.js' %}"></script>
+
+</body>
+
+</html>

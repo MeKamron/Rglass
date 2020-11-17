@@ -1,0 +1,261 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block header %}
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" type="text/css" href="{% static 'vendor/datatables/css/dataTables.bootstrap4.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'vendor/datatables/css/buttons.bootstrap4.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'vendor/datatables/css/select.bootstrap4.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'vendor/datatables/css/fixedHeader.bootstrap4.css' %}">
+
+<style>
+    .popup-header {
+        width: 100%;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .popup:hover {
+        background-color: #efeff6;
+        cursor: pointer;
+    }
+
+    .modal-title {
+        font-size: 1.2em;
+    }
+
+    .modal-content {
+        border-radius: 10px;
+
+    }
+    .page-link {
+        padding: 0.25rem 1rem !important;
+    }
+    .page-link:hover {
+        background-color: #9d9da7;
+        border-color: #9d9da7;
+    }
+    @media only screen and (max-width: 1024px){
+        .modal-dialog{
+            padding-left: 50px !important;
+        }
+    }
+    
+
+    @media only screen and (max-width: 576px){
+        .table td, .table th{
+            font-size: 13px !important;
+        }
+        .modal-dialog{
+            padding-left: 10px !important;
+        }
+        .sear {
+            padding-left: 0px !important;
+            padding-bottom: 10px;
+        }
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+{% if request.user.is_staff %}
+<!-- ============================================================== -->
+<!-- wrapper  -->
+<!-- ============================================================== -->
+<div class="dashboard-wrapper" style="height: 100%; ">
+    <div class="container-fluid  dashboard-content">
+        <!-- ============================================================== -->
+        <!-- pageheader -->
+        <!-- ============================================================== -->
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header pt-5 mt-2">
+                    <h2 class="pageheader-title">Buyurtmachilar</h2>
+                    <div class="page-breadcrumb">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Rainglass boshqaruvchi
+                                        uchun buyurtmalar oynasi </a></li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- end pageheader -->
+        <!-- ============================================================== -->
+        <div class="row">
+            <!-- ============================================================== -->
+            <!-- basic table  -->
+            <!-- ============================================================== -->
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="card">
+                    <h5 class="card-header">Jadval</h5>
+                            <a href="{% url 'rainglass:yangi-buyurtmachi' %}" style="position: absolute; right: 35px; top: 4px">
+                                <button class="btn btn-danger" style="width: 187px; float: right; font-size: 1.1em">
+                                    Yangi buyurtmachi
+                                </button>
+                            </a>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <div class="row pb-2">
+                                <div class="d-inline-block pl-3  col-lg-2 col-md-2">
+                                    <form action="{% url 'rainglass:buyurtmachi' %}" method="get">
+                                        <input type="text" class="form-control py-2" autocomplete="off" placeholder="qidirish..." name="q">
+                                        <button type="submit" class="d-none"></button>
+                                    </form>
+                                </div>
+                            </div>
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>F.I.Sh</th>
+                                        <th>Firma</th>
+                                        <th>Telfon raqam</th>
+                                        <th>Adress</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for buyurtmachi in buyurtmachilar %}
+                                    <tr>
+                                        <td>{{ buyurtmachi.id }}</td>
+                                        <td>{{ buyurtmachi.first_name }} {{ buyurtmachi.last_name }}
+                                        </td>
+                                        <td>{{ buyurtmachi.firma }}
+                                        </td>
+                                        <td><a href="tel://{{ buyurtmachi.phone_number }}"
+                                                class="p-2">{{ buyurtmachi.phone_number }}</a></td>
+                                        <td>{{ buyurtmachi.adress }}</td>
+
+                                        <td>
+                                            <!-- Button trigger modal -->
+                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-target="#{{ buyurtmachi.first_name }}">
+                                                Barcha buyurtmalar
+                                            </button>
+                                            <div class="modal fade" id="{{ buyurtmachi.first_name }}" tabindex="-1"
+                                                aria-labelledby="{{ buyurtmachi.first_name }}Label" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content text-center">
+                                                        <div class="popup-header pr-3 pl-3 py-2">
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <h4 class="modal-title pb-4"
+                                                                        id="{{ buyurtmachi.first_name }}Label">
+                                                                        {{ buyurtmachi.first_name }}
+                                                                        {{ buyurtmachi.last_name }}ning barcha
+                                                                        buyurtmalari<br>{{ buyurtmachi.buyurtmalar.all|length }}
+                                                                        ta
+                                                                    </h4>
+                                                                    <button type="button" class="close"
+                                                                        style="position: absolute;top:0;right: 10px;"
+                                                                        data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-body p-0">
+                                                            {% for buyurtma in buyurtmachi.buyurtmalar.all %}
+                                                            <a href="{{ buyurtma.get_absolute_url }}">
+                                                                <div class="py-3 popup"
+                                                                    style="border-top: 1px solid #e6e6e2;">
+                                                                    {{ buyurtma.buyurtma_nomi }}
+                                                                </div>
+                                                            </a>
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td><a href="{% url 'rainglass:buyurtmachini-taxrirlash' buyurtmachi.id %}"
+                                                class="btn taxrir">Taxrirlash</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                
+                            </table>
+                        </div>
+                        <div class="row pt-3 pl-3 float-right">
+                            {% if buyurtmachilar.paginator.num_pages > 1 %}
+                                <nav aria-label="...">
+                                    <ul class="pagination pagination-lg">
+                                        {% if buyurtmachilar.has_previous %}
+                                          <li class="page-item">
+                                            <a class="page-link" href="?page={{ buyurtmachilar.previous_page_number }}"  aria-label="Previous">
+                                                <span aria-hidden="true">«</span>
+                                                <span class="sr-only">Previous</span>
+                                            </a>
+                                        </li>
+                                          {% endif %}
+                                          {% for num in buyurtmachilar.paginator.page_range %}
+                                          {% if num == buyurtmachilar.number %}
+                                          <li class="page-item">
+                                            <a class="page-link" style="background-color: blue; color: white;" href="#" tabindex="-1">{{ num }}</a>
+                                        </li>
+                                          {% elif num > buyurtmachilar.number|add:'-3' and num < buyurtmachilar.number|add:'3' %}
+                                          <li class="page-item"><a class="page-link" href="?page={{ num }}" style="background-color: #9d9da7; color: white;">{{ num }}</a></li>
+                                          {% endif %}
+                                          {% endfor %}
+                                          {% if buyurtmachilar.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ buyurtmachilar.next_page_number }}" aria-label="Next">
+                                                <span aria-hidden="true">»</span>
+                                                <span class="sr-only">Next</span>
+                                            </a>
+                                        </li>
+                                          {% endif %}
+                                    </ul>
+                                </nav>
+                            {% endif %}
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- end basic table  -->
+            <!-- ============================================================== -->
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="container text-center pt-5">
+    <div class="row pt-5">
+        <div class="col-lg-12 pt-5">
+            <h1 style="color: red;">Siz uchun kirish taqiqlangan.</h1>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+{% block script %}
+<script>
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').trigger('focus')
+        })
+    </script>
+<script src="{% static 'vendor/multi-select/js/jquery.multi-select.js' %}"></script>
+<script src="{% static 'libs/js/my_table.js' %}"></script>
+<script src="{% static 'vendor/datatables/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script src="{% static 'vendor/datatables/js/buttons.bootstrap4.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/js/data-table.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/rowgroup/1.0.4/js/dataTables.rowGroup.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
+<script src="https://cdn.datatables.net/fixedheader/3.1.5/js/dataTables.fixedHeader.min.js"></script>
+
+{% endblock %}
